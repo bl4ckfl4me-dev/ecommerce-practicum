@@ -1,15 +1,14 @@
-import {BrowserRouter} from 'react-router-dom'
-import AppRouter from './components/AppRouter';
-import CustomNavbar from './components/CustomNavbar';
-import 'bootstrap/dist/css/bootstrap.css';
+import { BrowserRouter } from "react-router-dom";
+import AppRouter from "./components/AppRouter";
+import TopNavbar from "./components/TopNavbar";
 
 function App() {
-  return(
+  return (
     <BrowserRouter>
-      <CustomNavbar />
+      <TopNavbar />
       <AppRouter />
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
