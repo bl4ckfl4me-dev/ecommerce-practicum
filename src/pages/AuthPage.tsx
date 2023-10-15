@@ -14,7 +14,7 @@ export default function AuthPage() {
     <Card
       color="transparent"
       shadow={false}
-      className="flex mt-6 w-96 justify-center mx-auto"
+      className="flex md:w-96 h-screen max-h-fit justify-center mx-auto px-5"
     >
       <Typography variant="h4" color="blue-gray">
         {isLoginRoute ? "Авторизация" : "Регистрация"}
@@ -22,7 +22,7 @@ export default function AuthPage() {
       <Typography color="gray" className="mt-1 font-normal">
         Введите данные для {isLoginRoute ? " входа" : " регистрации"}
       </Typography>
-      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+      <form className="mt-8 mb-2 w-auto max-w-screen-lg">
         <div className="mb-4 flex flex-col gap-6">
           {!isLoginRoute && (
             <Input size="lg" label="Имя" crossOrigin={undefined} />

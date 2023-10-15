@@ -21,7 +21,7 @@ const TopNavbar = observer(() => {
     location.pathname === REGISTRATION_ROUTE;
 
   return (
-    <Navbar className="mx-auto max-w-full p-2 lg:rounded-full lg:pl-6">
+    <Navbar className="sticky max-w-full overflow-hidden top-0 z-10 h-max p-2 lg:rounded-full lg:px-6 lg:py-4">
       <div className="relative mx-auto flex justify-between items-center text-blue-gray-900">
         <Typography
           as="a"
