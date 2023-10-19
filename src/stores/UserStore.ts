@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 interface IUserData {
+    id: number,
     firstName?: string,
     lastName?: string,
     phoneNumber?: string,
@@ -8,26 +9,28 @@ interface IUserData {
 }
 
 export default class UserStore {
-    private _isAuth: boolean = false;
-    private _user: IUserData = {};
+    private _isAuth: Boolean = true;
+    private _user: IUserData = {
+        id: 1,
+    };
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    public get isAuth(){
+    public getIsAuth(){
         return this._isAuth;
     }
 
-    public set isAuth(isAuth: boolean) {
+    public setIsAuth(isAuth: Boolean) {
         this._isAuth = isAuth;
     }
 
-    public get user()  {
+    public getUser()  {
         return this._user
     }
 
-    public set user(user: IUserData)  {
+    public setUser(user: IUserData)  {
         this._user = user
     }
 }

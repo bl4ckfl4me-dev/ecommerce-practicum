@@ -3,6 +3,7 @@ import {
   MobileNav,
   Typography,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import { Bars2Icon } from "@heroicons/react/24/outline";
 import ProfileMenu from "./ProfileMenu";
@@ -15,14 +16,23 @@ import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
 
 const TopNavbar = observer(() => {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
-  const { user } = useContext(Context);
+  const { userStore } = useContext(Context);
   const isLoginRoute =
     location.pathname === LOGIN_ROUTE ||
     location.pathname === REGISTRATION_ROUTE;
 
   return (
-    <Navbar className="sticky max-w-full overflow-hidden top-0 z-10 h-max p-2 lg:rounded-full lg:px-6 lg:py-4">
+    <Navbar className="sticky max-w-full overflow-hidden top-0 z-50 h-max p-2 lg:rounded-full lg:px-6 lg:py-4">
       <div className="relative mx-auto flex justify-between items-center text-blue-gray-900">
+        <IconButton
+          size="sm"
+          color="blue-gray"
+          variant="text"
+          onClick={() => setIsNavOpen((cur) => !cur)}
+          className=" ml-2 lg:hidden"
+        >
+          <Bars2Icon className="h-6 w-6" />
+        </IconButton>
         <Typography
           as="a"
           href={HOME_ROUTE}
@@ -34,26 +44,15 @@ const TopNavbar = observer(() => {
           <NavList />
         </div>
 
-        {user.isAuth ? (
-          <>
-            <IconButton
-              size="sm"
-              color="blue-gray"
-              variant="text"
-              onClick={() => setIsNavOpen((cur) => !cur)}
-              className="ml-auto mr-2 lg:hidden"
-            >
-              <Bars2Icon className="h-6 w-6" />
-            </IconButton>
-            <ProfileMenu />
-          </>
+        {userStore.getIsAuth() ? (
+          <ProfileMenu />
         ) : (
           !isLoginRoute && <AuthPanel />
         )}
       </div>
-      <MobileNav open={isNavOpen}>
+      <Collapse open={isNavOpen}>
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 });

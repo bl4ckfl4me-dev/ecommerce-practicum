@@ -1,21 +1,11 @@
 import { Button, IconButton } from "@material-tailwind/react";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
-import { useState, useCallback, useEffect } from "react";
+import { useResize } from "../hooks/useResize";
 
 export default function AuthPanel() {
-  const [windowWidthSize, setWindowWidthSize] = useState(window.innerWidth);
-  const handleWindowResize = useCallback(() => {
-    setWindowWidthSize(window.innerWidth);
-  }, []);
+  const { isLargeDevice: isResize } = useResize();
 
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowResize);
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, [handleWindowResize]);
-
-  return windowWidthSize >= 450 ? (
+  return isResize ? (
     <div className="flex w-max gap-2">
       <a href={LOGIN_ROUTE}>
         <Button variant="filled" size="sm">

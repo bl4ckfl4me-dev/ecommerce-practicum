@@ -5,10 +5,39 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { useState, useContext } from "react";
+import { Context } from "../main";
+import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
-export default function AuthPage() {
+const AuthPage = observer(() => {
+  const handleAuthRequest = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    isLoginRoute ? sentLoginRequest() : sentRegistryRequst();
+  };
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
+  const { userStore } = useContext(Context);
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const sentLoginRequest = () => {
+    // fix it when backend server will be ready
+    if (email === "root@root" && password == "root") {
+      //userStore.setUser(userStore.getUser()); // add real user info from server token
+      userStore.setIsAuth(true);
+      navigate(HOME_ROUTE);
+    }
+  };
+  const sentRegistryRequst = () => {
+    if (confirmPassword === password) {
+      // wait on backend confirmation
+    }
+  };
 
   return (
     <Card
@@ -22,17 +51,38 @@ export default function AuthPage() {
       <Typography color="gray" className="mt-1 font-normal">
         Введите данные для {isLoginRoute ? " входа" : " регистрации"}
       </Typography>
-      <form className="mt-8 mb-2 w-auto max-w-screen-lg">
+      <form
+        className="mt-8 mb-2 w-auto max-w-screen-lg"
+        onSubmit={handleAuthRequest}
+      >
         <div className="mb-4 flex flex-col gap-6">
           {!isLoginRoute && (
-            <Input size="lg" label="Имя" crossOrigin={undefined} />
+            <Input
+              size="lg"
+              label="Имя"
+              crossOrigin={undefined}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
           )}
-          <Input size="lg" label="Email" crossOrigin={undefined} />
+          <Input
+            size="lg"
+            type="email"
+            label="Email"
+            crossOrigin={undefined}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <Input
             type="password"
             size="lg"
             label="Пароль"
             crossOrigin={undefined}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
           {!isLoginRoute && (
             <Input
@@ -40,6 +90,9 @@ export default function AuthPage() {
               size="lg"
               label="Подтвердите пароль"
               crossOrigin={undefined}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              error={confirmPassword !== password}
             />
           )}
         </div>
@@ -68,9 +121,10 @@ export default function AuthPage() {
             </Typography>
           }
           containerProps={{ className: "-ml-2.5" }}
+          required={!isLoginRoute}
           crossOrigin={undefined}
         />
-        <Button className="mt-6" fullWidth>
+        <Button className="mt-6" fullWidth type="submit">
           {isLoginRoute ? "Войти" : "Зарегистрироваться"}
         </Button>
         <Typography color="gray" className="mt-5 text-center font-normal">
@@ -105,4 +159,6 @@ export default function AuthPage() {
       </form>
     </Card>
   );
-}
+});
+
+export default AuthPage;

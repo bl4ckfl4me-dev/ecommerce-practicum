@@ -6,7 +6,7 @@ import {
   LifebuoyIcon,
   PowerIcon,
 } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Typography,
   Button,
@@ -16,32 +16,43 @@ import {
   MenuItem,
   Avatar,
 } from "@material-tailwind/react";
+import { USER_ROUTE } from "../utils/consts";
+import { Context } from "../main";
+import { observer } from "mobx-react-lite";
+import { useResize } from "../hooks/useResize";
 
 const profileMenuItems = [
   {
     label: "Мой профиль",
     icon: UserCircleIcon,
+    link: USER_ROUTE,
   },
   {
     label: "Настройки",
     icon: Cog6ToothIcon,
+    link: "#",
   },
   {
     label: "Входящие",
     icon: InboxArrowDownIcon,
+    link: "#",
   },
   {
     label: "Помощь",
     icon: LifebuoyIcon,
+    link: "#",
   },
   {
     label: "Выйти",
     icon: PowerIcon,
+    link: "#",
   },
 ];
 
-export default function ProfileMenu() {
+const ProfileMenu = observer(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { userStore } = useContext(Context);
+  const { isLargeDevice } = useResize();
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -55,7 +66,7 @@ export default function ProfileMenu() {
         >
           <Avatar
             variant="circular"
-            size="sm"
+            size={isLargeDevice ? "md" : "sm"}
             alt="tania andrew"
             className="border border-gray-900 p-0.5"
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
@@ -69,34 +80,38 @@ export default function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, link }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
+            <a href={link + "/" + userStore.getUser().id}>
+              <MenuItem
+                key={label}
+                onClick={closeMenu}
+                className={`flex items-center gap-2 rounded ${
+                  isLastItem
+                    ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                    : ""
+                }`}
               >
-                {label}
-              </Typography>
-            </MenuItem>
+                {React.createElement(icon, {
+                  className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                  strokeWidth: 2,
+                })}
+                <Typography
+                  as="span"
+                  variant="small"
+                  className="font-normal"
+                  color={isLastItem ? "red" : "inherit"}
+                >
+                  {label}
+                </Typography>
+              </MenuItem>
+            </a>
           );
         })}
       </MenuList>
     </Menu>
   );
-}
+});
+
+export default ProfileMenu;
