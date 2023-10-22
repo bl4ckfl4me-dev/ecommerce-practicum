@@ -9,7 +9,7 @@ interface IUserData {
 }
 
 export default class UserStore {
-    private _isAuth: Boolean = true;
+    private _isAuth: Boolean = false;
     private _user: IUserData = {
         id: 1,
     };

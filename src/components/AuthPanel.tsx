@@ -3,9 +3,9 @@ import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
 import { useResize } from "../hooks/useResize";
 
 export default function AuthPanel() {
-  const { isLargeDevice: isResize } = useResize();
+  const { isLargeDevice } = useResize();
 
-  return isResize ? (
+  return isLargeDevice ? (
     <div className="flex w-max gap-2">
       <a href={LOGIN_ROUTE}>
         <Button variant="filled" size="sm">
