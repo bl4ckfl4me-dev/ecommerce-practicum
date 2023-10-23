@@ -11,11 +11,11 @@ export default function Description() {
           isLargeDevice ? "flex-row" : "flex-wrap"
         } justify-around gap-x-5 gap-y-5 mt-10`}
       >
-        <Card className="h-40 md:w-1/3 w-full">
-          <Typography>header 1</Typography>
+        <Card className="h-72 md:w-1/3 w-full">
+          <Typography>card 1</Typography>
         </Card>
-        <Card className="h-40 md:w-2/3 w-full">
-          <Typography>header 2</Typography>
+        <Card className="h-72 md:w-2/3 w-full">
+          <Typography>card 2</Typography>
         </Card>
       </div>
       <div
@@ -23,11 +23,11 @@ export default function Description() {
           isLargeDevice ? "flex-row" : "flex-wrap"
         } justify-around gap-x-5 gap-y-5 mb-10 mt-5`}
       >
-        <Card className="h-40 md:w-2/3 w-full">
-          <Typography>header 3</Typography>
+        <Card className="h-72 md:w-2/3 w-full">
+          <Typography>card 3</Typography>
         </Card>
-        <Card className="h-40 md:w-1/3 w-full">
-          <Typography>header 4</Typography>
+        <Card className="h-72 md:w-1/3 w-full">
+          <Typography>card 4</Typography>
         </Card>
       </div>
     </div>

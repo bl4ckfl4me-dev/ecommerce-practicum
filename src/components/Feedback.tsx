@@ -25,7 +25,6 @@ export default function Feedback() {
         }`}
       >
         <CardHeader
-          shadow={false}
           floated={false}
           className={`w-full mx-0 my-0 ${isLargeDevice && "rounded-r-none"}`}
         >
