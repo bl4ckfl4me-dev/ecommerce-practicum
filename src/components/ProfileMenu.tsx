@@ -18,7 +18,6 @@ import {
 } from "@material-tailwind/react";
 import { USER_ROUTE } from "../utils/consts";
 import { Context } from "../main";
-import { observer } from "mobx-react-lite";
 import { useResize } from "../hooks/useResize";
 
 const profileMenuItems = [
@@ -49,7 +48,7 @@ const profileMenuItems = [
   },
 ];
 
-const ProfileMenu = observer(() => {
+const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { userStore } = useContext(Context);
   const { isLargeDevice } = useResize();
@@ -112,6 +111,6 @@ const ProfileMenu = observer(() => {
       </MenuList>
     </Menu>
   );
-});
+};
 
 export default ProfileMenu;

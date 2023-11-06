@@ -11,10 +11,9 @@ import NavList from "./NavList";
 import React, { useContext } from "react";
 import AuthPanel from "./AuthPanel";
 import { Context } from "../main";
-import { observer } from "mobx-react-lite";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
 
-const TopNavbar = observer(() => {
+const TopNavbar = () => {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const { userStore } = useContext(Context);
   const isLoginRoute =
@@ -55,6 +54,6 @@ const TopNavbar = observer(() => {
       </Collapse>
     </Navbar>
   );
-});
+};
 
 export default TopNavbar;

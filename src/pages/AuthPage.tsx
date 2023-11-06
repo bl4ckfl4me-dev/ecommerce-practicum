@@ -5,37 +5,94 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
-import { useState, useContext } from "react";
-import { Context } from "../main";
-import { useNavigate } from "react-router-dom";
-import { observer } from "mobx-react-lite";
+import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { useState } from "react";
 
-const AuthPage = observer(() => {
+const AuthPage = () => {
   const handleAuthRequest = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     isLoginRoute ? sentLoginRequest() : sentRegistryRequst();
   };
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
-  const { userStore } = useContext(Context);
-  const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [full_name, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const formInputs = [
+    {
+      type: "email",
+      label: "Email",
+      value: email,
+      onChange: (e: any) => setEmail(e.target.value),
+      required: true,
+      isLoginInput: false,
+    },
+    {
+      type: "text",
+      label: "Имя пользователя",
+      value: username,
+      onChange: (e: any) => setUsername(e.target.value),
+      required: true,
+      isLoginInput: true,
+    },
+    {
+      type: "text",
+      label: "ФИО",
+      value: full_name,
+      onChange: (e: any) => setFullName(e.target.value),
+      required: true,
+      isLoginInput: false,
+    },
+    {
+      type: "password",
+      label: "Пароль",
+      value: password,
+      onChange: (e: any) => setPassword(e.target.value),
+      required: true,
+      isLoginInput: true,
+    },
+    {
+      type: "password",
+      label: "Подтвердите пароль",
+      value: confirmPassword,
+      onChange: (e: any) => setConfirmPassword(e.target.value),
+      required: true,
+      isLoginInput: false,
+      error: confirmPassword !== password,
+    },
+  ];
+
+  //  TODO: replace api fetching into another place
   const sentLoginRequest = () => {
-    // fix it when backend server will be ready
-    if (email === "root@root" && password == "root") {
-      //userStore.setUser(userStore.getUser()); // add real user info from server token
-      userStore.setIsAuth(true);
-      navigate(HOME_ROUTE);
-    }
+    fetch("http://localhost:8000/token", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded",
+      }),
+      body: `grant_type=&username=${username}&password=${password}`,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   };
   const sentRegistryRequst = () => {
     if (confirmPassword === password) {
-      // wait on backend confirmation
+      fetch("http://localhost:8000/user/public/add", {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify({
+          email,
+          username,
+          full_name,
+          password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res));
     }
   };
 
@@ -43,7 +100,7 @@ const AuthPage = observer(() => {
     <Card
       color="transparent"
       shadow={false}
-      className="flex md:w-96 h-screen max-h-fit justify-center mx-auto px-5"
+      className="flex md:w-96 sm:w-2/3 h-screen max-h-fit justify-center mx-auto px-5"
     >
       <Typography variant="h4" color="blue-gray">
         {isLoginRoute ? "Авторизация" : "Регистрация"}
@@ -56,44 +113,11 @@ const AuthPage = observer(() => {
         onSubmit={handleAuthRequest}
       >
         <div className="mb-4 flex flex-col gap-6">
-          {!isLoginRoute && (
-            <Input
-              size="lg"
-              label="Имя"
-              crossOrigin={undefined}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          )}
-          <Input
-            size="lg"
-            type="email"
-            label="Email"
-            crossOrigin={undefined}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            type="password"
-            size="lg"
-            label="Пароль"
-            crossOrigin={undefined}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {!isLoginRoute && (
-            <Input
-              type="password"
-              size="lg"
-              label="Подтвердите пароль"
-              crossOrigin={undefined}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              error={confirmPassword !== password}
-            />
+          {formInputs.map(
+            (input) =>
+              isLoginRoute === input.isLoginInput && (
+                <Input size="lg" crossOrigin={undefined} {...input} />
+              )
           )}
         </div>
         <Checkbox
@@ -159,6 +183,6 @@ const AuthPage = observer(() => {
       </form>
     </Card>
   );
-});
+};
 
 export default AuthPage;

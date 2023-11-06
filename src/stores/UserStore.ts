@@ -1,4 +1,3 @@
-import { makeAutoObservable } from "mobx";
 
 interface IUserData {
     id: number,
@@ -15,7 +14,6 @@ export default class UserStore {
     };
 
     constructor() {
-        makeAutoObservable(this);
     }
 
     public getIsAuth(){
