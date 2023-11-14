@@ -1,15 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { HOME_ROUTE } from "../utils/consts";
-import { useContext } from "react";
-import { Context } from "../main";
 import { authRoutes, publicRoutes } from "../utils/routes";
+import { useAppSelector } from "../hooks";
 
 const AppRouter = () => {
-  const { userStore } = useContext(Context);
+  const { user } = useAppSelector((state) => state.user);
 
   return (
     <Routes>
-      {userStore.getIsAuth() &&
+      {user.isLoggedIn &&
         authRoutes.map(({ path, Component }) => (
           <Route key={path} path={path} element={<Component />} />
         ))}

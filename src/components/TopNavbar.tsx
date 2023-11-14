@@ -8,14 +8,28 @@ import {
 import { Bars2Icon } from "@heroicons/react/24/outline";
 import ProfileMenu from "./ProfileMenu";
 import NavList from "./NavList";
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import AuthPanel from "./AuthPanel";
-import { Context } from "../main";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { updateAccessToken } from "../store/userSlice";
 
 const TopNavbar = () => {
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.user
+  );
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    console.log(user);
+    console.log(accessToken);
+    if (!accessToken) {
+    }
+    console.log(refreshToken);
+    console.log(location.pathname);
+    console.log(isLoginRoute);
+  }, []);
+
   const [isNavOpen, setIsNavOpen] = React.useState(false);
-  const { userStore } = useContext(Context);
   const isLoginRoute =
     location.pathname === LOGIN_ROUTE ||
     location.pathname === REGISTRATION_ROUTE;
@@ -43,11 +57,7 @@ const TopNavbar = () => {
           <NavList />
         </div>
 
-        {userStore.getIsAuth() ? (
-          <ProfileMenu />
-        ) : (
-          !isLoginRoute && <AuthPanel />
-        )}
+        {user.isLoggedIn ? <ProfileMenu /> : <AuthPanel />}
       </div>
       <Collapse open={isNavOpen}>
         <NavList />

@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "./store";
 
 
 export const useResize = () => {
@@ -21,3 +23,8 @@ export const useResize = () => {
     isLargeDevice: windowWidthSize >= MINIMUM_WIDGET_WIDTH,
   }
 }
+
+
+type DispatchFunc = () => AppDispatch
+export const useAppDispatch: DispatchFunc = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

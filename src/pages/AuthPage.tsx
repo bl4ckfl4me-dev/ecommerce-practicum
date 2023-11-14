@@ -5,21 +5,33 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
-import { useState } from "react";
+import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { fetchTokens, fetchUser } from "../store/userSlice";
+import { redirect } from "react-router-dom";
 
 const AuthPage = () => {
   const handleAuthRequest = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    isLoginRoute ? sentLoginRequest() : sentRegistryRequst();
+    isLoginRoute ? loginHandler() : sentRegistryRequst();
   };
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
-
+  const dispatch = useAppDispatch();
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.user
+  );
   const [username, setUsername] = useState("");
   const [full_name, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchUser({ username, refreshToken, accessToken }));
+    console.log(user);
+    redirect(HOME_ROUTE);
+  }, [accessToken]);
 
   const formInputs = [
     {
@@ -65,36 +77,10 @@ const AuthPage = () => {
     },
   ];
 
-  //  TODO: replace api fetching into another place
-  const sentLoginRequest = () => {
-    fetch("http://localhost:8000/token", {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/x-www-form-urlencoded",
-      }),
-      body: `grant_type=&username=${username}&password=${password}`,
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+  const loginHandler = () => {
+    dispatch(fetchTokens({ username, password }));
   };
-  const sentRegistryRequst = () => {
-    if (confirmPassword === password) {
-      fetch("http://localhost:8000/user/public/add", {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        body: JSON.stringify({
-          email,
-          username,
-          full_name,
-          password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log(res));
-    }
-  };
+  const sentRegistryRequst = () => {};
 
   return (
     <Card
@@ -102,10 +88,10 @@ const AuthPage = () => {
       shadow={false}
       className="flex md:w-96 sm:w-2/3 h-screen max-h-fit justify-center mx-auto px-5"
     >
-      <Typography variant="h4" color="blue-gray">
+      <Typography as="span" variant="h4" color="blue-gray">
         {isLoginRoute ? "Авторизация" : "Регистрация"}
       </Typography>
-      <Typography color="gray" className="mt-1 font-normal">
+      <Typography as="span" color="gray" className="mt-1 font-normal">
         Введите данные для {isLoginRoute ? " входа" : " регистрации"}
       </Typography>
       <form
@@ -115,14 +101,25 @@ const AuthPage = () => {
         <div className="mb-4 flex flex-col gap-6">
           {formInputs.map(
             (input) =>
-              isLoginRoute === input.isLoginInput && (
-                <Input size="lg" crossOrigin={undefined} {...input} />
+              input.isLoginInput && (
+                <Input
+                  key={input.label}
+                  size="lg"
+                  crossOrigin={undefined}
+                  type={input.type}
+                  label={input.label}
+                  value={input.value}
+                  onChange={input.onChange}
+                  required={input.required}
+                  error={input.error}
+                />
               )
           )}
         </div>
         <Checkbox
           label={
             <Typography
+              as="span"
               variant="small"
               color="gray"
               className="flex items-center font-normal"
@@ -151,7 +148,11 @@ const AuthPage = () => {
         <Button className="mt-6" fullWidth type="submit">
           {isLoginRoute ? "Войти" : "Зарегистрироваться"}
         </Button>
-        <Typography color="gray" className="mt-5 text-center font-normal">
+        <Typography
+          as="span"
+          color="gray"
+          className="mt-5 text-center font-normal"
+        >
           {isLoginRoute ? (
             <div className="my-1">
               <>

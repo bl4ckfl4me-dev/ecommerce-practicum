@@ -1,6 +1,6 @@
 import { Button, IconButton } from "@material-tailwind/react";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
-import { useResize } from "../hooks/useResize";
+import { useResize } from "../hooks";
 
 export default function AuthPanel() {
   const { isLargeDevice } = useResize();

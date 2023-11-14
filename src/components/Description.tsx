@@ -1,5 +1,5 @@
 import { Card, Typography } from "@material-tailwind/react";
-import { useResize } from "../hooks/useResize";
+import { useResize } from "../hooks";
 
 export default function Description() {
   const { isLargeDevice } = useResize();

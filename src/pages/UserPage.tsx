@@ -15,7 +15,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import React from "react";
-import { useResize } from "../hooks/useResize";
+import { useResize } from "../hooks";
 
 export default function UserPage() {
   const data = [

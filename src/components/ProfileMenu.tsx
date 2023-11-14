@@ -17,8 +17,7 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { USER_ROUTE } from "../utils/consts";
-import { Context } from "../main";
-import { useResize } from "../hooks/useResize";
+import { useAppSelector, useResize } from "../hooks";
 
 const profileMenuItems = [
   {
@@ -49,8 +48,8 @@ const profileMenuItems = [
 ];
 
 const ProfileMenu = () => {
+  const { user } = useAppSelector((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { userStore } = useContext(Context);
   const { isLargeDevice } = useResize();
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -82,7 +81,7 @@ const ProfileMenu = () => {
         {profileMenuItems.map(({ label, icon, link }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <a href={link + "/" + userStore.getUser().id}>
+            <a href={link + "/" + user.id}>
               <MenuItem
                 key={label}
                 onClick={closeMenu}

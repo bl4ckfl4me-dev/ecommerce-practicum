@@ -8,7 +8,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { YMaps, Map } from "@pbe/react-yandex-maps";
-import { useResize } from "../hooks/useResize";
+import { useResize } from "../hooks";
 
 export default function Feedback() {
   const { isLargeDevice } = useResize();
