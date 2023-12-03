@@ -6,9 +6,27 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { useState } from "react";
 
 export default function AuthPage() {
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
+  const [passwd, setPasswd] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
+  const confirmIsPasswd = passwd !== confirmPass;
+
+  function logIn(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const responseBody: { [key: string]: unknown } = {};
+    formData.forEach(
+      (value, property: string) => (responseBody[property] = value)
+    );
+    console.log(responseBody);
+
+    // отправляем запрос, по завершении которого мб запоминаем в наш контекст и кидаем на главную для авторизованных, 
+    // или мб прокидываем что-то (ящик уже занят, имя (если должно быть уникальным) неуникально и т.д.)
+  }
 
   return (
     <Card
@@ -22,25 +40,33 @@ export default function AuthPage() {
       <Typography color="gray" className="mt-1 font-normal">
         Введите данные для {isLoginRoute ? " входа" : " регистрации"}
       </Typography>
-      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={logIn}>
         <div className="mb-4 flex flex-col gap-6">
           {!isLoginRoute && (
-            <Input size="lg" label="Имя" crossOrigin={undefined} />
+            <Input size="lg" label="Имя" name="name" crossOrigin />
           )}
-          <Input size="lg" label="Email" crossOrigin={undefined} />
+          <Input size="lg" label="Email" name="email" crossOrigin />
           <Input
+            value={passwd}
             type="password"
+            name="password"
             size="lg"
             label="Пароль"
-            crossOrigin={undefined}
+            crossOrigin
+            onChange={(e) => setPasswd(e.target.value)}
           />
           {!isLoginRoute && (
-            <Input
-              type="password"
-              size="lg"
-              label="Подтвердите пароль"
-              crossOrigin={undefined}
-            />
+            <div>
+              <Input
+                error={confirmIsPasswd}
+                type="password"
+                size="lg"
+                label="Подтвердите пароль"
+                crossOrigin
+                onChange={(e) => setConfirmPass(e.target.value)}
+              />
+              {confirmIsPasswd && "Пароли должны совпадать"}
+            </div>
           )}
         </div>
         <Checkbox
@@ -68,9 +94,9 @@ export default function AuthPage() {
             </Typography>
           }
           containerProps={{ className: "-ml-2.5" }}
-          crossOrigin={undefined}
+          crossOrigin
         />
-        <Button className="mt-6" fullWidth>
+        <Button className="mt-6" fullWidth type="submit">
           {isLoginRoute ? "Войти" : "Зарегистрироваться"}
         </Button>
         <Typography color="gray" className="mt-5 text-center font-normal">

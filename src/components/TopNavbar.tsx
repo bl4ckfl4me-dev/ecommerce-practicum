@@ -1,21 +1,21 @@
 import {
   Navbar,
-  MobileNav,
   Typography,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import { Bars2Icon } from "@heroicons/react/24/outline";
 import ProfileMenu from "./ProfileMenu";
 import NavList from "./NavList";
 import React, { useContext } from "react";
 import AuthPanel from "./AuthPanel";
-import { Context } from "../main";
 import { observer } from "mobx-react-lite";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
+import { UserContext } from "./UserContext";
 
 const TopNavbar = observer(() => {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
-  const { user } = useContext(Context);
+  const user = useContext(UserContext).user;
   const isLoginRoute =
     location.pathname === LOGIN_ROUTE ||
     location.pathname === REGISTRATION_ROUTE;
@@ -30,9 +30,11 @@ const TopNavbar = observer(() => {
         >
           Online School
         </Typography>
-        <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
-          <NavList />
-        </div>
+        {user.isAuth && (
+          <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
+            <NavList />
+          </div>
+        )}
 
         {user.isAuth ? (
           <>
@@ -51,9 +53,9 @@ const TopNavbar = observer(() => {
           !isLoginRoute && <AuthPanel />
         )}
       </div>
-      <MobileNav open={isNavOpen}>
+      <Collapse open={isNavOpen}>
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 });
