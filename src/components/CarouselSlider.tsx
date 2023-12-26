@@ -1,4 +1,4 @@
-import { Carousel, IconButton } from "@material-tailwind/react";
+import { Carousel, IconButton, Typography } from "@material-tailwind/react";
 
 export default function CarouselSlider() {
   return (
@@ -69,26 +69,111 @@ export default function CarouselSlider() {
         </IconButton>
       )}
     >
-      <img
-        src="..\\..\\static\\img\\DevochkaDenis.jpg"
-        alt="image 1"
-        className="h-full w-full object-cover"
-      />
-      <img
-        src="..\\..\\static\\img\\classMarat.jpg"
-        alt="image 2"
-        className="h-full w-full object-cover"
-      />
-      <img
-        src="..\\..\\static\\img\\classZaur.jpg"
-        alt="image 3"
-        className="h-full w-full object-cover"
-      />
-       <img
-        src="..\\..\\static\\img\\classZaur2.jpg"
-        alt="image 4"
-        className="h-full w-full object-cover"
-      />
+      <div className="relative h-full w-full">
+        <img
+          src="..\\..\\static\\img\\DevochkaDenis.jpg"
+          alt="image 1"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+          <div className="w-3/4 text-center md:w-2/4">
+            <Typography
+              variant="h1"
+              color="white"
+              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+            >
+              Онлайн школа
+            </Typography>
+            <Typography
+              variant="lead"
+              color="white"
+              className="mb-12 opacity-80"
+            >
+              Онлайн-школа - это платформа, которая предлагает качественное
+              образование в различных областях знаний.
+            </Typography>
+          </div>
+        </div>
+      </div>
+      <div className="relative h-full w-full">
+        <img
+          src="..\\..\\static\\img\\classMarat.jpg"
+          alt="image 2"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+          <div className="w-3/4 text-center md:w-2/4">
+            <Typography
+              variant="h1"
+              color="white"
+              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+            >
+              Онлайн школа
+            </Typography>
+            <Typography
+              variant="lead"
+              color="white"
+              className="mb-12 opacity-80"
+            >
+              Онлайн-школа - это возможность получить образование без
+              необходимости посещать занятия в традиционном формате.
+            </Typography>
+          </div>
+        </div>
+      </div>
+      <div className="relative h-full w-full">
+        <img
+          src="..\\..\\static\\img\\classZaur.jpg"
+          alt="image 3"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+          <div className="w-3/4 text-center md:w-2/4">
+            <Typography
+              variant="h1"
+              color="white"
+              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+            >
+              Онлайн школа
+            </Typography>
+            <Typography
+              variant="lead"
+              color="white"
+              className="mb-12 opacity-80"
+            >
+              Онлайн-школа - это удобный способ обучения, который позволяет вам
+              выбирать удобное время для занятий и изучать материалы в своем
+              темпе.
+            </Typography>
+          </div>
+        </div>
+      </div>
+      <div className="relative h-full w-full">
+        <img
+          src="..\\..\\static\\img\\classZaur2.jpg"
+          alt="image 4"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+          <div className="w-3/4 text-center md:w-2/4">
+            <Typography
+              variant="h1"
+              color="white"
+              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+            >
+              Онлайн школа
+            </Typography>
+            <Typography
+              variant="lead"
+              color="white"
+              className="mb-12 opacity-80"
+            >
+              Онлайн школа - это онлайн-платформа, которая предлагает широкий
+              спектр образовательных программ для учеников всех возрастов.
+            </Typography>
+          </div>
+        </div>
+      </div>
     </Carousel>
   );
 }
