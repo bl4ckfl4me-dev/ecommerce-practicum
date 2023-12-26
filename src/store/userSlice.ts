@@ -14,7 +14,7 @@ interface IToken {
 
 export const fetchTokens = createAsyncThunk(
     'user/fetchToken',
-    async ({username, password}: UserCredentials, {rejectWithValue}) => {
+    async ({username, password}: UserCredentials, {rejectWithValue, dispatch}) => {
         const response = await fetch('http://localhost:8000/token', {
             method: 'POST',
             headers: {
@@ -54,7 +54,7 @@ export const updateAccessToken = createAsyncThunk(
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
-    async ({username, accessToken, refreshToken}: IToken, {rejectWithValue}) => {
+    async ({username, accessToken}: IToken, {rejectWithValue}) => {
         const response = await fetch(`http://localhost:8000/user/protected/${username}`, {
             method: 'GET',
             headers: {
@@ -64,7 +64,7 @@ export const fetchUser = createAsyncThunk(
         });
 
         if (response.status !== 200) {
-            rejectWithValue({username, refreshToken});
+            rejectWithValue({error: 'error while fetching user data'})
         }
 
         const user = await response.json();
@@ -112,6 +112,7 @@ const userSlice = createSlice({
             state.accessToken = action.payload;
         })
         builder.addCase(fetchUser.rejected, (state, _) => {
+            console.log('i was here')
             state.user.isLoggedIn = false;
         })
         builder.addCase(updateAccessToken.rejected, (state, _) => {

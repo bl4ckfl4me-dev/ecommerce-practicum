@@ -83,7 +83,7 @@ const ProfileMenu = () => {
           return (
             <a href={link + "/" + user.id}>
               <MenuItem
-                key={label}
+                key={key}
                 onClick={closeMenu}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem

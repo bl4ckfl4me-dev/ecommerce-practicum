@@ -1,6 +1,5 @@
 import {
   Navbar,
-  MobileNav,
   Typography,
   IconButton,
   Collapse,
@@ -18,16 +17,6 @@ const TopNavbar = () => {
   const { user, accessToken, refreshToken } = useAppSelector(
     (state) => state.user
   );
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    console.log(user);
-    console.log(accessToken);
-    if (!accessToken) {
-    }
-    console.log(refreshToken);
-    console.log(location.pathname);
-    console.log(isLoginRoute);
-  }, []);
 
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const isLoginRoute =
@@ -56,8 +45,7 @@ const TopNavbar = () => {
         <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
           <NavList />
         </div>
-
-        {user.isLoggedIn ? <ProfileMenu /> : <AuthPanel />}
+        {user.isLoggedIn ? <ProfileMenu /> : !isLoginRoute && <AuthPanel />}
       </div>
       <Collapse open={isNavOpen}>
         <NavList />
