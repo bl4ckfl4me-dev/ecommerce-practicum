@@ -18,19 +18,19 @@ import {
 
 const navListMenuItems = [
   {
-    title: "@material-tailwind/html",
+    title: "Курсы и программы",
     description:
-      "Learn how to use @material-tailwind/html, packed with rich components and widgets.",
+      "Выберите свой путь обучения: наши курсы и программы” Описание: “Ознакомьтесь с нашими разнообразными курсами и программами, чтобы найти то, что подходит именно вам. От базовых уровней до продвинутых специализаций - есть что-то для каждого.",
   },
   {
-    title: "@material-tailwind/react",
+    title: "Учителя и отзывы",
     description:
-      "Learn how to use @material-tailwind/react, packed with rich components for React.",
+      "Оцените опыт наших учителей и успехи выпускников” Описание: “Познакомьтесь с учителями нашей онлайн-школы и узнайте, почему они считаются экспертами в своих областях. Прочтите отзывы от наших довольных выпускников, чтобы убедиться в качестве обучения.",
   },
   {
-    title: "Material Tailwind PRO",
+    title: "Поддержка и контакты",
     description:
-      "A complete set of UI Elements for building faster websites in less time.",
+      "Получите помощь и поддержку на своем пути обучения” Описание: “Не стесняйтесь обращаться к нашей дружелюбной и опытной команде поддержки. Мы всегда готовы помочь вам в любых вопросах, связанных с обучением. Свяжитесь с нами по указанным контактам.",
   },
 ];
 
@@ -56,7 +56,7 @@ function NavListMenu() {
         <MenuHandler>
           <Typography as="a" href="#" variant="small" className="font-normal">
             <MenuItem className="hidden items-center gap-2 text-blue-gray-900 lg:flex lg:rounded-full">
-              <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Pages{" "}
+              <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Навигация{" "}
               <ChevronDownIcon
                 strokeWidth={2}
                 className={`h-3 w-3 transition-transform ${
@@ -81,7 +81,7 @@ function NavListMenu() {
         </MenuList>
       </Menu>
       <MenuItem className="flex items-center gap-2 text-blue-gray-900 lg:hidden">
-        <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Pages{" "}
+        <Square3Stack3DIcon className="h-[18px] w-[18px]" /> Навигация{" "}
       </MenuItem>
       <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
         {renderItems}
@@ -92,15 +92,15 @@ function NavListMenu() {
 
 const navListItems = [
   {
-    label: "Account",
+    label: "Профиль",
     icon: UserCircleIcon,
   },
   {
-    label: "Blocks",
+    label: "Учебный план",
     icon: CubeTransparentIcon,
   },
   {
-    label: "Docs",
+    label: "О Нас",
     icon: CodeBracketSquareIcon,
   },
 ];
