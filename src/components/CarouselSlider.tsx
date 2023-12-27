@@ -1,6 +1,33 @@
 import { Carousel, IconButton, Typography } from "@material-tailwind/react";
 
 export default function CarouselSlider() {
+  const carouselDatas: Array<CarouselDatas> = [
+    {
+      backgroundPath: "..\\..\\static\\img\\DevochkaDenis.jpg",
+      title: "Онлайн школа",
+      description:
+        "современный и гибкий формат образования, который позволяет учиться в удобное время и из любого места",
+    },
+    {
+      backgroundPath: "..\\..\\static\\img\\classMarat.jpg",
+      title: "Онлайн школа",
+      description:
+        "Мы предлагаем широкий выбор курсов по различным предметам: математике, английскому языку, программированию, и др",
+    },
+    {
+      backgroundPath: "..\\..\\static\\img\\classZaur.jpg",
+      title: "Онлайн школа",
+      description:
+        "Система онлайн обучения позволяет контролировать прогресс и получать обратную связь, а также общаться с преподавателями и другими учениками",
+    },
+    {
+      backgroundPath: "..\\..\\static\\img\\classZaur2.jpg",
+      title: "Онлайн школа",
+      description:
+        "Присоединяйтесь к нам и раскройте свой потенциал в комфортной обстановке!",
+    },
+  ];
+
   return (
     <Carousel
       autoplay={true}
@@ -69,111 +96,39 @@ export default function CarouselSlider() {
         </IconButton>
       )}
     >
-      <div className="relative h-full w-full">
-        <img
-          src="..\\..\\static\\img\\DevochkaDenis.jpg"
-          alt="image 1"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
-          <div className="w-3/4 text-center md:w-2/4">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              Онлайн школа
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              Онлайн-школа - это платформа, которая предлагает качественное
-              образование в различных областях знаний.
-            </Typography>
+      {carouselDatas.map((data) => (
+        <div className="relative h-full w-full">
+          <img
+            src={data.backgroundPath}
+            alt="image 4"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+            <div className="w-3/4 text-center md:w-2/4">
+              <Typography
+                variant="h1"
+                color="white"
+                className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+              >
+                {data.title}
+              </Typography>
+              <Typography
+                variant="lead"
+                color="white"
+                className="mb-12 opacity-80"
+              >
+                {data.description}
+              </Typography>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="relative h-full w-full">
-        <img
-          src="..\\..\\static\\img\\classMarat.jpg"
-          alt="image 2"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
-          <div className="w-3/4 text-center md:w-2/4">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              Онлайн школа
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              Онлайн-школа - это возможность получить образование без
-              необходимости посещать занятия в традиционном формате.
-            </Typography>
-          </div>
-        </div>
-      </div>
-      <div className="relative h-full w-full">
-        <img
-          src="..\\..\\static\\img\\classZaur.jpg"
-          alt="image 3"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
-          <div className="w-3/4 text-center md:w-2/4">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              Онлайн школа
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              Онлайн-школа - это удобный способ обучения, который позволяет вам
-              выбирать удобное время для занятий и изучать материалы в своем
-              темпе.
-            </Typography>
-          </div>
-        </div>
-      </div>
-      <div className="relative h-full w-full">
-        <img
-          src="..\\..\\static\\img\\classZaur2.jpg"
-          alt="image 4"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
-          <div className="w-3/4 text-center md:w-2/4">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              Онлайн школа
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-80"
-            >
-              Онлайн школа - это онлайн-платформа, которая предлагает широкий
-              спектр образовательных программ для учеников всех возрастов.
-            </Typography>
-          </div>
-        </div>
-      </div>
+      ))}
     </Carousel>
   );
+}
+
+interface CarouselDatas {
+  backgroundPath: string;
+  title: string;
+  description: string;
 }
