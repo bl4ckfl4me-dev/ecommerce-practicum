@@ -33,6 +33,15 @@ const AuthPage = () => {
     redirect(HOME_ROUTE);
   }, [accessToken]);
 
+  const confirmPasswordForm = {
+    type: "password",
+    label: "Подтвердите пароль",
+    value: confirmPassword,
+    onChange: (e: any) => setConfirmPassword(e.target.value),
+    required: true,
+    error: confirmPassword !== password,
+  };
+
   const formInputs = [
     {
       type: "email",
@@ -65,15 +74,6 @@ const AuthPage = () => {
       onChange: (e: any) => setPassword(e.target.value),
       required: true,
       isLoginInput: true,
-    },
-    {
-      type: "password",
-      label: "Подтвердите пароль",
-      value: confirmPassword,
-      onChange: (e: any) => setConfirmPassword(e.target.value),
-      required: true,
-      isLoginInput: false,
-      error: confirmPassword !== password,
     },
   ];
 
@@ -111,9 +111,21 @@ const AuthPage = () => {
                   value={input.value}
                   onChange={input.onChange}
                   required={input.required}
-                  error={input.error}
                 />
               )
+          )}
+          {!isLoginRoute && (
+            <Input
+              key={confirmPasswordForm.label}
+              size="lg"
+              crossOrigin={undefined}
+              type={confirmPasswordForm.type}
+              label={confirmPasswordForm.label}
+              value={confirmPasswordForm.value}
+              onChange={confirmPasswordForm.onChange}
+              required={confirmPasswordForm.required}
+              error={confirmPasswordForm.error}
+            />
           )}
         </div>
         <Checkbox
