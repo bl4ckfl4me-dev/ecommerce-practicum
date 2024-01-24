@@ -14,7 +14,7 @@ interface IToken {
 
 export const fetchTokens = createAsyncThunk(
     'user/fetchToken',
-    async ({username, password}: UserCredentials, {rejectWithValue, dispatch}) => {
+    async ({username, password}: UserCredentials, {rejectWithValue}) => {
         const response = await fetch('http://localhost:8000/token', {
             method: 'POST',
             headers: {

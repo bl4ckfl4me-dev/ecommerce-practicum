@@ -19,9 +19,7 @@ const AuthPage = () => {
   const [err, setErr] = useState("");
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
   const dispatch = useAppDispatch();
-  const { accessToken, refreshToken } = useAppSelector(
-    (state) => state.user
-  );
+  const { accessToken, refreshToken } = useAppSelector((state) => state.user);
 
   // useEffect(() => {
   //   dispatch(fetchUser({ username, refreshToken, accessToken }));
@@ -34,14 +32,14 @@ const AuthPage = () => {
       name: "email",
       label: "Email",
       required: true,
-      isLoginInput: false,
+      isLoginInput: true,
     },
     {
       type: "text",
       label: "Имя пользователя",
       name: "user",
       required: true,
-      isLoginInput: true,
+      isLoginInput: false,
     },
     {
       type: "text",
@@ -61,7 +59,7 @@ const AuthPage = () => {
 
   const loginHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     const formData = new FormData(event.target as HTMLFormElement);
-    const username = formData.get("user")?.toString();
+    const username = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     if (username && password) {
       dispatch(fetchTokens({ username, password }))
@@ -81,7 +79,7 @@ const AuthPage = () => {
     event
   ) => {
     const formData = new FormData(event.target as HTMLFormElement);
-    const username = formData.get("user")?.toString();
+    const username = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     const confirmPass = formData.get("confirmPass")?.toString();
     if (confirmPass !== password) {
@@ -92,7 +90,8 @@ const AuthPage = () => {
         .then(() => {
           setErr("");
           return dispatch(fetchUser({ username, refreshToken, accessToken }));
-        }).then(() => {
+        })
+        .then(() => {
           redirect(HOME_ROUTE);
         })
         .catch(() => {
@@ -118,8 +117,8 @@ const AuthPage = () => {
         onSubmit={handleAuthRequest}
       >
         <div className="mb-4 flex flex-col gap-6">
-          {formInputs.map(
-            (input) =>
+          {formInputs.map((input) =>
+            isLoginRoute ? (
               input.isLoginInput && (
                 <Input
                   key={input.label}
@@ -131,6 +130,17 @@ const AuthPage = () => {
                   required={input.required}
                 />
               )
+            ) : (
+              <Input
+                key={input.label}
+                name={input.name}
+                size="lg"
+                crossOrigin={undefined}
+                type={input.type}
+                label={input.label}
+                required={input.required}
+              />
+            )
           )}
           {!isLoginRoute && (
             <Input
