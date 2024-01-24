@@ -96,8 +96,8 @@ export default function CarouselSlider() {
         </IconButton>
       )}
     >
-      {carouselDatas.map((data) => (
-        <div className="relative h-full w-full">
+      {carouselDatas.map((data, index) => (
+        <div className="relative h-full w-full" key={index}>
           <img
             src={data.backgroundPath}
             alt="image 4"

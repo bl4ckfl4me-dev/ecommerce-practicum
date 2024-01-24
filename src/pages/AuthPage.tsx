@@ -6,81 +6,100 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchTokens, fetchUser } from "../store/userSlice";
 import { redirect } from "react-router-dom";
 
 const AuthPage = () => {
-  const handleAuthRequest = (e: { preventDefault: () => void }) => {
+  const handleAuthRequest: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    isLoginRoute ? loginHandler() : sentRegistryRequst();
+    isLoginRoute ? loginHandler(e) : sentRegistryRequst(e);
   };
+  const [err, setErr] = useState("");
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
   const dispatch = useAppDispatch();
-  const { user, accessToken, refreshToken } = useAppSelector(
+  const { accessToken, refreshToken } = useAppSelector(
     (state) => state.user
   );
-  const [username, setUsername] = useState("");
-  const [full_name, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  useEffect(() => {
-    dispatch(fetchUser({ username, refreshToken, accessToken }));
-    console.log(user);
-    redirect(HOME_ROUTE);
-  }, [accessToken]);
-
-  const confirmPasswordForm = {
-    type: "password",
-    label: "Подтвердите пароль",
-    value: confirmPassword,
-    onChange: (e: any) => setConfirmPassword(e.target.value),
-    required: true,
-    error: confirmPassword !== password,
-  };
+  // useEffect(() => {
+  //   dispatch(fetchUser({ username, refreshToken, accessToken }));
+  //   redirect(HOME_ROUTE);
+  // }, [accessToken, dispatch, refreshToken, username]);
 
   const formInputs = [
     {
       type: "email",
+      name: "email",
       label: "Email",
-      value: email,
-      onChange: (e: any) => setEmail(e.target.value),
       required: true,
       isLoginInput: false,
     },
     {
       type: "text",
       label: "Имя пользователя",
-      value: username,
-      onChange: (e: any) => setUsername(e.target.value),
+      name: "user",
       required: true,
       isLoginInput: true,
     },
     {
       type: "text",
       label: "ФИО",
-      value: full_name,
-      onChange: (e: any) => setFullName(e.target.value),
+      name: "name",
       required: true,
       isLoginInput: false,
     },
     {
       type: "password",
       label: "Пароль",
-      value: password,
-      onChange: (e: any) => setPassword(e.target.value),
+      name: "password",
       required: true,
       isLoginInput: true,
     },
   ];
 
-  const loginHandler = () => {
-    dispatch(fetchTokens({ username, password }));
+  const loginHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
+    const formData = new FormData(event.target as HTMLFormElement);
+    const username = formData.get("user")?.toString();
+    const password = formData.get("password")?.toString();
+    if (username && password) {
+      dispatch(fetchTokens({ username, password }))
+        .then(() => {
+          setErr("");
+          return dispatch(fetchUser({ username, refreshToken, accessToken }));
+        })
+        .then(() => {
+          redirect(HOME_ROUTE);
+        })
+        .catch(() => {
+          setErr("Нет такого пользователя");
+        });
+    }
   };
-  const sentRegistryRequst = () => {};
+  const sentRegistryRequst: React.FormEventHandler<HTMLFormElement> = (
+    event
+  ) => {
+    const formData = new FormData(event.target as HTMLFormElement);
+    const username = formData.get("user")?.toString();
+    const password = formData.get("password")?.toString();
+    const confirmPass = formData.get("confirmPass")?.toString();
+    if (confirmPass !== password) {
+      setErr("Пароли не совпадают");
+    }
+    if (username && password) {
+      dispatch(fetchTokens({ username, password }))
+        .then(() => {
+          setErr("");
+          return dispatch(fetchUser({ username, refreshToken, accessToken }));
+        }).then(() => {
+          redirect(HOME_ROUTE);
+        })
+        .catch(() => {
+          setErr("Невозможно зарегистрироваться - пользователь уже существует");
+        });
+    }
+  };
 
   return (
     <Card
@@ -104,27 +123,23 @@ const AuthPage = () => {
               input.isLoginInput && (
                 <Input
                   key={input.label}
+                  name={input.name}
                   size="lg"
                   crossOrigin={undefined}
                   type={input.type}
                   label={input.label}
-                  value={input.value}
-                  onChange={input.onChange}
                   required={input.required}
                 />
               )
           )}
           {!isLoginRoute && (
             <Input
-              key={confirmPasswordForm.label}
               size="lg"
               crossOrigin={undefined}
-              type={confirmPasswordForm.type}
-              label={confirmPasswordForm.label}
-              value={confirmPasswordForm.value}
-              onChange={confirmPasswordForm.onChange}
-              required={confirmPasswordForm.required}
-              error={confirmPasswordForm.error}
+              type={"password"}
+              label={"Подтвердите пароль"}
+              required={true}
+              error={err !== ""}
             />
           )}
         </div>
@@ -157,6 +172,7 @@ const AuthPage = () => {
           required={!isLoginRoute}
           crossOrigin={undefined}
         />
+        {err !== "" && <Typography>{err}</Typography>}
         <Button className="mt-6" fullWidth type="submit">
           {isLoginRoute ? "Войти" : "Зарегистрироваться"}
         </Button>

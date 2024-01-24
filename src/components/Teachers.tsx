@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 
 export default function Teachers() {
-  let teachersInfo: Array<TeacherInfo> = [
+  const teachersInfo: Array<TeacherInfo> = [
     {
       name: "Елена Ивановна",
       avatarPath: "..\\..\\static\\img\\c7pgvODrpjk.jpg",
@@ -62,8 +62,8 @@ export default function Teachers() {
 
   return (
     <div className="flex flex-nowrap snap-x snap-mandatory overflow-x-auto no-scrollbar gap-5 px-16">
-      {teachersInfo.map((info) => (
-        <Card shadow={false} className="w-72 flex-none snap-center snap-always">
+      {teachersInfo.map((info, index) => (
+        <Card shadow={false} className="w-72 flex-none snap-center snap-always" key={index}>
           <CardHeader
             color="transparent"
             floated={false}

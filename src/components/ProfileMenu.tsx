@@ -6,7 +6,7 @@ import {
   LifebuoyIcon,
   PowerIcon,
 } from "@heroicons/react/24/outline";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Button,
@@ -81,9 +81,8 @@ const ProfileMenu = () => {
         {profileMenuItems.map(({ label, icon, link }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <a href={link + "/" + user.id}>
+            <a href={link + "/" + user.id} key={key}>
               <MenuItem
-                key={key}
                 onClick={closeMenu}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem

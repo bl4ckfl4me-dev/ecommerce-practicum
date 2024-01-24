@@ -10,10 +10,11 @@ export default function HomePage() {
   const { accessToken, refreshToken, user } = useAppSelector(
     (state) => state.user
   );
+  console.log(user)
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchUser({ username: user.username, accessToken, refreshToken }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchUser({ username: user.username, accessToken, refreshToken }));
+  // }, []);
   return (
     <>
       <CarouselSlider />
