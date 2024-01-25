@@ -20,8 +20,6 @@ const TopNavbar = () => {
     location.pathname === LOGIN_ROUTE ||
     location.pathname === REGISTRATION_ROUTE;
 
-  console.log(user.isLoggedIn);
-
   return (
     <Navbar className="sticky max-w-full overflow-hidden top-0 z-50 h-max p-2 lg:rounded-md lg:px-6 lg:py-4">
       <div className="relative mx-auto flex justify-between items-center text-blue-gray-900">

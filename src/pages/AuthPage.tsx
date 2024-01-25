@@ -19,12 +19,9 @@ const AuthPage = () => {
   const [err, setErr] = useState("");
   const isLoginRoute = location.pathname === LOGIN_ROUTE;
   const dispatch = useAppDispatch();
-  const { accessToken, refreshToken } = useAppSelector((state) => state.user);
-
-  // useEffect(() => {
-  //   dispatch(fetchUser({ username, refreshToken, accessToken }));
-  //   redirect(HOME_ROUTE);
-  // }, [accessToken, dispatch, refreshToken, username]);
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.user
+  );
 
   const formInputs = [
     {
@@ -57,22 +54,27 @@ const AuthPage = () => {
     },
   ];
 
-  const loginHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const loginHandler: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     const formData = new FormData(event.target as HTMLFormElement);
     const username = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     if (username && password) {
-      dispatch(fetchTokens({ username, password }))
-        .then(() => {
+      try {
+        await dispatch(fetchTokens({ username, password }));
+        if (user.isLoggedIn) {
           setErr("");
-          return dispatch(fetchUser({ username, refreshToken, accessToken }));
-        })
-        .then(() => {
-          redirect(HOME_ROUTE);
-        })
-        .catch(() => {
-          setErr("Нет такого пользователя");
-        });
+          await dispatch(fetchUser({ username, refreshToken, accessToken }));
+          if (user.isLoggedIn) {
+            redirect(HOME_ROUTE);
+          }
+          throw err;
+        }
+        throw err;
+      } catch (er) {
+        setErr("Нет такого пользователя");
+      }
     }
   };
   const sentRegistryRequst: React.FormEventHandler<HTMLFormElement> = (

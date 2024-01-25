@@ -28,12 +28,7 @@ export default function Description() {
               pretium dolor sapien, ut dapibus enim egestas sit amet. Ut a dui
               ullamcorper, viverra mi sit amet, ornare orci. Proin nisi ex,
               congue nec est quis, commodo euismod nibh. Lorem ipsum dolor sit
-              amet, consectetur adipiscing elit. Curabitur cursus nulla egestas
-              pharetra pulvinar. Praesent tincidunt non nulla et vehicula.
-              Mauris pulvinar, nisi non tristique euismod, felis dui interdum
-              mauris, id faucibus enim risus at sem. Vivamus tincidunt lacus
-              congue tincidunt dapibus. Maecenas lectus ex, sagittis non semper
-              at, elementum in enim.
+              amet, consectetur adipiscing elit.
             </Typography>
           </CardBody>
           <CardFooter className="pt-0">
