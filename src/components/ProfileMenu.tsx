@@ -16,43 +16,53 @@ import {
   MenuItem,
   Avatar,
 } from "@material-tailwind/react";
-import { USER_ROUTE } from "../utils/consts";
-import { useAppSelector, useResize } from "../hooks";
-
-const profileMenuItems = [
-  {
-    label: "Мой профиль",
-    icon: UserCircleIcon,
-    link: USER_ROUTE,
-  },
-  {
-    label: "Настройки",
-    icon: Cog6ToothIcon,
-    link: "#",
-  },
-  {
-    label: "Входящие",
-    icon: InboxArrowDownIcon,
-    link: "#",
-  },
-  {
-    label: "Помощь",
-    icon: LifebuoyIcon,
-    link: "#",
-  },
-  {
-    label: "Выйти",
-    icon: PowerIcon,
-    link: "#",
-  },
-];
+import { HOME_ROUTE, USER_ROUTE } from "../utils/consts";
+import { useAppDispatch, useAppSelector, useResize } from "../hooks";
+import { fetchTokens } from "../store/userSlice";
+import { redirect } from "react-router-dom";
 
 const ProfileMenu = () => {
   const { user } = useAppSelector((state) => state.user);
+  const profileMenuItems = [
+    {
+      label: "Мой профиль",
+      icon: UserCircleIcon,
+      link: USER_ROUTE,
+    },
+    {
+      label: "Настройки",
+      icon: Cog6ToothIcon,
+      link: `${user.id}/settings`,
+    },
+    {
+      label: "Входящие",
+      icon: InboxArrowDownIcon,
+      link: `${user.id}/inbox`,
+    },
+    {
+      label: "Помощь",
+      icon: LifebuoyIcon,
+      link: "/help",
+    },
+    {
+      label: "Выйти",
+      icon: PowerIcon,
+      link: "#",
+    },
+  ];
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLargeDevice } = useResize();
+  const dispatch = useAppDispatch();
 
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = async (link: string) => {
+    if (link === "#") {
+      //TODO: тут поменять на разлоигн
+      await dispatch(fetchTokens({ username: "123", password: "456" }));
+      redirect(HOME_ROUTE);
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -81,9 +91,9 @@ const ProfileMenu = () => {
         {profileMenuItems.map(({ label, icon, link }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <a href={link + "/" + user.id} key={key}>
+            <a href={link} key={key}>
               <MenuItem
-                onClick={closeMenu}
+                onClick={() => closeMenu(link)}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem
                     ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
