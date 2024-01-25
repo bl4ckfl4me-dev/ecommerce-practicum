@@ -8,7 +8,7 @@ import {
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../utils/consts";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { fetchTokens, fetchUser } from "../store/userSlice";
+import { fetchTokens, fetchUser, registerPerson } from "../store/userSlice";
 import { redirect } from "react-router-dom";
 
 const AuthPage = () => {
@@ -58,14 +58,16 @@ const AuthPage = () => {
     event
   ) => {
     const formData = new FormData(event.target as HTMLFormElement);
-    const username = formData.get("email")?.toString();
+    const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
-    if (username && password) {
+    if (email && password) {
       try {
-        await dispatch(fetchTokens({ username, password }));
+        await dispatch(fetchTokens({ username: email, password }));
         if (user.isLoggedIn) {
           setErr("");
-          await dispatch(fetchUser({ username, refreshToken, accessToken }));
+          await dispatch(
+            fetchUser({ username: email, refreshToken, accessToken })
+          );
           if (user.isLoggedIn) {
             redirect(HOME_ROUTE);
           }
@@ -77,28 +79,41 @@ const AuthPage = () => {
       }
     }
   };
-  const sentRegistryRequst: React.FormEventHandler<HTMLFormElement> = (
+  const sentRegistryRequst: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     const formData = new FormData(event.target as HTMLFormElement);
-    const username = formData.get("email")?.toString();
+    const username = formData.get("user")?.toString();
+    const fio = formData.get("name")?.toString();
+    const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     const confirmPass = formData.get("confirmPass")?.toString();
     if (confirmPass !== password) {
       setErr("Пароли не совпадают");
+      return;
     }
-    if (username && password) {
-      dispatch(fetchTokens({ username, password }))
-        .then(() => {
+    if (email && password && username && fio) {
+      try {
+        await dispatch(
+          registerPerson({
+            user: username,
+            name: fio,
+            username: email,
+            password,
+          })
+        );
+        if (user.isLoggedIn) {
           setErr("");
-          return dispatch(fetchUser({ username, refreshToken, accessToken }));
-        })
-        .then(() => {
-          redirect(HOME_ROUTE);
-        })
-        .catch(() => {
-          setErr("Невозможно зарегистрироваться - пользователь уже существует");
-        });
+          await dispatch(fetchUser({ username: email, refreshToken, accessToken }));
+          if (user.isLoggedIn) {
+            redirect(HOME_ROUTE);
+          }
+          throw err;
+        }
+        throw err;
+      } catch (er) {
+        setErr("Нет такого пользователя");
+      }
     }
   };
 

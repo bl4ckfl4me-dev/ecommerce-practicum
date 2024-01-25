@@ -18,7 +18,9 @@ export default function HomePage() {
           <Feedback />
         </>
       ) : (
-        <></>
+        <>
+          Здесь должно быть расписание и все такое
+        </>
       )}
     </>
   );

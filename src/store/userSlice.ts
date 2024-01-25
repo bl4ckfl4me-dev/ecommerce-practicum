@@ -11,6 +11,35 @@ interface IToken {
   username?: string;
 }
 
+interface RegisterCredentials {
+  user: string;
+  name: string;
+  username: string;
+  password: string;
+}
+
+export const registerPerson = createAsyncThunk(
+  "student/register",
+  async (
+    { user, name, username, password }: RegisterCredentials,
+    { rejectWithValue }
+  ) => {
+    const response = await fetch("http://localhost:8000/registry", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({ user, name, email: username, password }),
+    });
+    if (response.status !== 200) {
+      return rejectWithValue(await response.json());
+    }
+    const { access_token, refresh_token } = await response.json();
+    return { access_token, refresh_token };
+  }
+);
+
 export const fetchTokens = createAsyncThunk(
   "user/fetchToken",
   async ({ username, password }: UserCredentials, { rejectWithValue }) => {
@@ -22,7 +51,6 @@ export const fetchTokens = createAsyncThunk(
       },
       body: `grant_type=&username=${username}&password=${password}&scope=&client_id=&client_secret=`,
     });
-    console.log(response);
     if (response.status !== 200) {
       return rejectWithValue(await response.json());
     }
@@ -103,18 +131,27 @@ const userSlice = createSlice({
       state.refreshToken = action.payload.refresh_token;
       localStorage.setItem("refreshToken", state.refreshToken);
     });
-    builder.addCase(fetchUser.fulfilled, ({ user, status }, { payload }) => {
+    builder.addCase(fetchUser.fulfilled, ({ user }, { payload }) => {
       user.email = payload.email;
       user.fullName = payload.full_name;
       user.id = payload.id;
       user.isActive = payload.is_active;
       user.username = payload.username;
       user.isLoggedIn = true;
-      status = "resolved";
+      
     });
+    builder.addCase(registerPerson.fulfilled, (state, action) => {
+      state.accessToken = action.payload.access_token;
+      state.refreshToken = action.payload.refresh_token;
+      localStorage.setItem("refreshToken", state.refreshToken);
+    })
     builder.addCase(updateAccessToken.fulfilled, (state, action) => {
       state.accessToken = action.payload;
     });
+    builder.addCase(registerPerson.rejected, (state) => {
+      state.user.isLoggedIn = false;
+      state.user.isActive = false;
+    })
     builder.addCase(fetchTokens.rejected, (state) => {
       state.user.isLoggedIn = false;
     });
