@@ -114,7 +114,7 @@ const userSlice = createSlice({
       fullName: "",
       id: 0,
       isActive: false,
-      isLoggedIn: false,
+      isLoggedIn: true,
     },
     status: "",
     accessToken: "",

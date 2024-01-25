@@ -3,6 +3,7 @@ import Feedback from "../components/Feedback";
 import Description from "../components/Description";
 import Teachers from "../components/Teachers";
 import { useAppSelector } from "../hooks";
+import { Timetable } from "../components/Timetable";
 
 export default function HomePage() {
   const { user } = useAppSelector((state) => state.user);
@@ -19,7 +20,7 @@ export default function HomePage() {
         </>
       ) : (
         <>
-          Здесь должно быть расписание и все такое
+          <Timetable />
         </>
       )}
     </>
